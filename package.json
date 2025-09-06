@@ -1,0 +1,27 @@
+{
+  "name": "machine-test-node",
+  "version": "1.0.0",
+  "description": "A Node.js web application for managing categories and products with MySQL database, built with Express.js and Sequelize ORM",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "migrate": "sequelize-cli db:migrate",
+    "migrate:undo": "sequelize-cli db:migrate:undo",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["nodejs", "express", "mysql", "sequelize", "rest-api", "crud"],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.4",
+    "nodemon": "^3.1.10",
+    "sequelize": "^6.37.7",
+    "sequelize-auto": "^0.8.8",
+    "sequelize-cli": "^6.6.3"
+  }
+}
