@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Category Master</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f4f6f9;
+      color: #2c3e50;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #34495e;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      color: #2c3e50;
+      margin-top: 20px;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 5px;
+    }
+
+    input {
+      padding: 10px;
+      width: 70%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+      transition: border 0.3s;
+    }
+
+    input:focus {
+      border-color: #3498db;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin-left: 10px;
+      border: none;
+      border-radius: 6px;
+      background: #3498db;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #2980b9;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 15px;
+    }
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ecf0f1;
+      margin: 8px 0;
+      padding: 12px 15px;
+      border-radius: 6px;
+      transition: transform 0.2s ease, background 0.3s ease;
+    }
+
+    li:hover {
+      background: #dff9fb;
+      transform: translateX(5px);
+    }
+
+    li button {
+      background: #e74c3c;
+      font-size: 12px;
+      padding: 6px 10px;
+    }
+
+    li button:hover {
+      background: #c0392b;
+    }
+  </style>
+</head>
+<body>
+  <h1>Category Master</h1>
+  <div class="container">
+    <h2>Add Category</h2>
+    <input type="text" id="categoryName" placeholder="Enter category name">
+    <button onclick="addCategory()">Add</button>
+
+    <h2>Categories List</h2>
+    <ul id="categoryList"></ul>
+  </div>
+
+  <script>
+    const API_URL = "http://localhost:3000/categories";
+
+    async function loadCategories() {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      const list = document.getElementById("categoryList");
+      list.innerHTML = "";
+
+      data.category.forEach(cat => {
+        const li = document.createElement("li");
+        li.textContent = cat.CategoryName;
+
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "Delete";
+        delBtn.onclick = () => deleteCategory(cat.CategoryId);
+
+        li.appendChild(delBtn);
+        list.appendChild(li);
+      });
+    }
+
+    async function addCategory() {
+      const name = document.getElementById("categoryName").value.trim();
+      if (!name) return alert("Please enter category name");
+
+      await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ CategoryName: name })
+      });
+
+      document.getElementById("categoryName").value = "";
+      loadCategories();
+    }
+
+    async function deleteCategory(id) {
+      await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+      loadCategories();
+    }
+
+    loadCategories();
+  </script>
+</body>
+</html>
